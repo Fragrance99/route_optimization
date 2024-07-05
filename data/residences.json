@@ -10,12 +10,12 @@
 			"comment": "Patient has dementia.",
 			"open_time_slots": [
 				{
-					"beginning": "12:00",
-					"end": "15:00"
+					"beginning": "12:00:00",
+					"end": "15:00:00"
 				},
 				{
-					"beginning": "16:00",
-					"end": "17:00"
+					"beginning": "16:00:00",
+					"end": "17:00:00"
 				}
 			],
 			"distances": [
