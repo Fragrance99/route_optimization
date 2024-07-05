@@ -1,16 +1,17 @@
 import json
 from datetime import time
+from typing import List
 
 from classes.time_slot import TimeSlot
 from classes.careworker import Careworker
-from classes.residence import Residence
+from classes.residence import Distance, Residence
 
 
-def import_careworkers(json_file_path) -> list[Careworker]:
+def import_careworkers(json_file_path) -> List[Careworker]:
     with open(json_file_path, "r") as file:
         data = json.load(file)
 
-    careworkers = []
+    careworkers: List[Careworker] = []
     for cw_data in data['careworkers']:
         working_hours = []
         for wh_data in cw_data['working_hours']:
@@ -32,11 +33,11 @@ def import_careworkers(json_file_path) -> list[Careworker]:
     return careworkers
 
 
-def import_residences(json_file_path) -> list[Residence]:
+def import_residences(json_file_path) -> List[Residence]:
     with open(json_file_path, "r") as file:
         data = json.load(file)
 
-    residences = []
+    residences: List[Residence] = []
     for res_data in data['residences']:
         time_slots = []
         for ts_data in res_data['open_time_slots']:
@@ -58,6 +59,20 @@ def import_residences(json_file_path) -> list[Residence]:
         )
         residences.append(residence)
 
+    for start_res in residences:
+        for res_data in data['residences']:
+            if start_res.get_unique_name() == res_data['unique_name']:
+                # json entry for residence object found
+                distances: List[Distance] = []
+                for dest_data in res_data['distances']:
+                    for dest_res in residences:
+                        if dest_res.get_unique_name() == dest_data['destination']:
+                            # found residence object entry in List -> create Distance object and append
+                            distance = Distance(destination=dest_res,
+                                                distance=dest_data['distance'])
+                            distances.append(distance)
+                start_res.add_distances(distances)
+
     return residences
 
 
@@ -65,6 +80,8 @@ if __name__ == "__main__":
     careworkers = import_careworkers("data/careworkers.json")
     for cw in careworkers:
         print(cw)
+
+    print("")
 
     residences = import_residences("data/residences.json")
     for res in residences:

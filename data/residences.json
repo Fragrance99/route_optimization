@@ -36,6 +36,154 @@
 					"distance": 10
 				}
 			]
+		},
+		{
+			"unique_name": "Family B",
+			"address": "B Street",
+			"phone_number": "02166 123457",
+			"level_of_care": 2,
+			"task": "Administer medication",
+			"time_expense": "0.75",
+			"comment": "Patient is bedridden.",
+			"open_time_slots": [
+				{
+					"beginning": "10:00:00",
+					"end": "12:00:00"
+				},
+				{
+					"beginning": "14:00:00",
+					"end": "16:00:00"
+				}
+			],
+			"distances": [
+				{
+					"destination": "Family A",
+					"distance": 2.5
+				},
+				{
+					"destination": "Family C",
+					"distance": 3
+				},
+				{
+					"destination": "Family D",
+					"distance": 5
+				},
+				{
+					"destination": "Family E",
+					"distance": 7.5
+				}
+			]
+		},
+		{
+			"unique_name": "Family C",
+			"address": "C Street",
+			"phone_number": "02166 123458",
+			"level_of_care": 3,
+			"task": "Physical therapy",
+			"time_expense": "1.0",
+			"comment": "Patient has mobility issues.",
+			"open_time_slots": [
+				{
+					"beginning": "09:00:00",
+					"end": "10:00:00"
+				},
+				{
+					"beginning": "13:00:00",
+					"end": "15:00:00"
+				}
+			],
+			"distances": [
+				{
+					"destination": "Family A",
+					"distance": 4
+				},
+				{
+					"destination": "Family B",
+					"distance": 3
+				},
+				{
+					"destination": "Family D",
+					"distance": 2.5
+				},
+				{
+					"destination": "Family E",
+					"distance": 6
+				}
+			]
+		},
+		{
+			"unique_name": "Family D",
+			"address": "D Street",
+			"phone_number": "02166 123459",
+			"level_of_care": 1,
+			"task": "Routine check-up",
+			"time_expense": "0.5",
+			"comment": "Patient is stable.",
+			"open_time_slots": [
+				{
+					"beginning": "08:00:00",
+					"end": "09:00:00"
+				},
+				{
+					"beginning": "11:00:00",
+					"end": "12:00:00"
+				}
+			],
+			"distances": [
+				{
+					"destination": "Family A",
+					"distance": 6.5
+				},
+				{
+					"destination": "Family B",
+					"distance": 5
+				},
+				{
+					"destination": "Family C",
+					"distance": 2.5
+				},
+				{
+					"destination": "Family E",
+					"distance": 4
+				}
+			]
+		},
+		{
+			"unique_name": "Family E",
+			"address": "E Street",
+			"phone_number": "02166 123460",
+			"level_of_care": 2,
+			"task": "Wound care",
+			"time_expense": "1.25",
+			"comment": "Patient has diabetes.",
+			"open_time_slots": [
+				{
+					"beginning": "07:00:00",
+					"end": "08:00:00"
+				},
+				{
+					"beginning": "10:00:00",
+					"end": "11:00:00"
+				}
+			],
+			"distances": [
+				{
+					"destination": "Family A",
+					"distance": 10
+				},
+				{
+					"destination": "Family B",
+					"distance": 7.5
+				},
+				{
+					"destination": "Family C",
+					"distance": 6
+				},
+				{
+					"destination": "Family D",
+					"distance": 4
+				}
+			]
 		}
 	]
 }
