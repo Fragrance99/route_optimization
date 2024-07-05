@@ -59,7 +59,7 @@ def import_residences(json_file_path: str) -> List[Residence]:
             phone_number=res_data['phone_number'],
             level_of_care=res_data['level_of_care'],
             task=res_data['task'],
-            time_expense=res_data['time_expense'],
+            minutes_of_time_expense=res_data['minutes_of_time_expense'],
             comment=res_data['comment'],
             open_time_slots=time_slots,
             distances=[]
@@ -76,7 +76,7 @@ def import_residences(json_file_path: str) -> List[Residence]:
                         if dest_res.get_unique_name() == dest_data['destination']:
                             # found residence object entry in List -> create Distance object and append
                             distance = Distance(destination=dest_res,
-                                                distance=dest_data['distance'])
+                                                minutes_of_distance=dest_data['minutes_of_distance'])
                             distances.append(distance)
                 start_res.add_distances(distances)
 

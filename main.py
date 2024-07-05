@@ -6,7 +6,7 @@ def main():
     residences = []
 
     while 1:
-
+        print("")
         print("********* Hauptmenü *********")
         print("1: Pflegekräfte importieren")
         print("2: Pflegekräfte exportieren")
@@ -19,7 +19,7 @@ def main():
         match choice:
             case "1":
                 path = input(
-                    "Pfad angeben (data/careworkers.json): ") or "data/careworkers.json"
+                    "Pfad angeben (data/careworkers.json): ") or "data/careworkers.j2son"
                 careworkers = file_handler.import_careworkers(
                     json_file_path=path)
                 for cw in careworkers:
@@ -45,8 +45,6 @@ def main():
                 exit()
             case _:
                 print("Fehlerhafte Eingabe")
-
-        print("\n")
 
 
 if __name__ == "__main__":
