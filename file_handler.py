@@ -34,9 +34,10 @@ def import_careworkers(json_file_path: str) -> List[Careworker]:
 
 
 def export_careworkers(json_file_path: str, careworkers: List[Careworker]):
-    data = {"careworkers": list(map(Careworker.to_dict, careworkers))}
-    with open(json_file_path, "w") as file:
-        json.dump(data, file, indent='\t')
+    if careworkers:
+        data = {"careworkers": list(map(Careworker.to_dict, careworkers))}
+        with open(json_file_path, "w") as file:
+            json.dump(data, file, indent='\t')
 
 
 def import_residences(json_file_path: str) -> List[Residence]:
@@ -83,22 +84,24 @@ def import_residences(json_file_path: str) -> List[Residence]:
 
 
 def export_residences(json_file_path: str, residences: List[Residence]):
-    data = {"residences": list(map(Residence.to_dict, residences))}
-    with open(json_file_path, "w") as file:
-        json.dump(data, file, indent='\t')
+    if residences:
+        data = {"residences": list(map(Residence.to_dict, residences))}
+        with open(json_file_path, "w") as file:
+            json.dump(data, file, indent='\t')
 
 
+# test
 if __name__ == "__main__":
     careworkers = import_careworkers(json_file_path="data/careworkers.json")
     export_careworkers(json_file_path="data/careworkers.json",
                        careworkers=careworkers)
-    # for cw in careworkers:
-    #     print(cw)
+    for cw in careworkers:
+        print(cw)
 
-    # print("")
+    print("")
 
     residences = import_residences("data/residences.json")
     export_residences(json_file_path="data/residences.json",
                       residences=residences)
-    # for res in residences:
-    #     print(res)
+    for res in residences:
+        print(res)
