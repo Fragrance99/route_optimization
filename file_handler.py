@@ -82,6 +82,12 @@ def import_residences(json_file_path: str) -> List[Residence]:
     return residences
 
 
+def export_residences(json_file_path: str, residences: List[Residence]):
+    data = {"residences": list(map(Residence.to_dict, residences))}
+    with open(json_file_path, "w") as file:
+        json.dump(data, file, indent='\t')
+
+
 if __name__ == "__main__":
     careworkers = import_careworkers(json_file_path="data/careworkers.json")
     export_careworkers(json_file_path="data/careworkers.json",
@@ -91,6 +97,8 @@ if __name__ == "__main__":
 
     # print("")
 
-    # residences = import_residences("data/residences.json")
+    residences = import_residences("data/residences.json")
+    export_residences(json_file_path="data/residences.json",
+                      residences=residences)
     # for res in residences:
     #     print(res)

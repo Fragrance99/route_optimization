@@ -23,6 +23,20 @@ class Residence:
     def add_distances(self, distances: List['Distance']):
         self.distances = distances
 
+    def to_dict(self) -> dict:
+        dictionary = {
+            "unique_name": self.unique_name,
+            "address": self.address,
+            "phone_number": self.phone_number,
+            "level_of_care": self.level_of_care,
+            "task": self.task,
+            "time_expense": self.time_expense,
+            "comment": self.comment,
+            "open_time_slots": list(map(TimeSlot.to_dict, self.open_time_slots)),
+            "distances": list(map(Distance.to_dict, self.distances))
+        }
+        return dictionary
+
 
 class Distance:
     def __init__(self, destination: Residence, distance: float):
