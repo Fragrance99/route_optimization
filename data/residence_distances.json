@@ -1,0 +1,41 @@
+{
+	"residences": [
+		{
+			"unique_name": "Family A",
+			"address": "A Street",
+			"phone_number": "02166 123456",
+			"level_of_care": 1,
+			"task": "Change the bandage",
+			"time_expense": "0.5",
+			"comment": "Patient has dementia.",
+			"open_time_slots": [
+				{
+					"beginning": "12:00",
+					"end": "15:00"
+				},
+				{
+					"beginning": "16:00",
+					"end": "17:00"
+				}
+			],
+			"distances": [
+				{
+					"destination": "Family B",
+					"distance": 2.5
+				},
+				{
+					"destination": "Family C",
+					"distance": 4
+				},
+				{
+					"destination": "Family D",
+					"distance": 6.5
+				},
+				{
+					"destination": "Family E",
+					"distance": 10
+				}
+			]
+		}
+	]
+}

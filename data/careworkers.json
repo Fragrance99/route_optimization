@@ -1,0 +1,21 @@
+{
+	"careworkers": [
+		{	
+			"unique_name": "Tim",
+			"phone_number": "02166 123654",
+			"level_of_care_competence": 3,
+			"comment": "No artificial respiration.",
+			"maximum_working_hours": 9,
+			"working_hours": [
+				{
+					"beginning": "12:00:00",
+					"end": "14:00:00"
+				},
+				{
+					"beginning": "16:00:00",
+					"end": "18:00:00"
+				}
+			]
+		}
+	]
+}
