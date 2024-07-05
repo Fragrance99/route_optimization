@@ -8,3 +8,10 @@ class TimeSlot:
 
     def __str__(self) -> str:
         return f"Beginning: {self.beginning.isoformat()}, End: {self.end.isoformat()}"
+
+    def to_dict(self) -> dict:
+        dictionary = {
+            "beginning": self.beginning.isoformat(),
+            "end": self.end.isoformat()
+        }
+        return dictionary

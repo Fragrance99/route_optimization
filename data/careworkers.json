@@ -1,6 +1,6 @@
 {
 	"careworkers": [
-		{	
+		{
 			"unique_name": "Tim",
 			"phone_number": "02166 123654",
 			"level_of_care_competence": 3,
@@ -13,7 +13,7 @@
 				},
 				{
 					"beginning": "16:00:00",
-					"end": "18:00:00"
+					"end": "18:02:00"
 				}
 			]
 		},

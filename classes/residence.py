@@ -31,3 +31,10 @@ class Distance:
 
     def __str__(self) -> str:
         return f"Destination: {self.destination.get_unique_name()}, Distance: {self.distance}"
+
+    def to_dict(self) -> dict:
+        dictionary = {
+            "destination": self.destination.get_unique_name(),
+            "distance": self.distance
+        }
+        return dictionary
