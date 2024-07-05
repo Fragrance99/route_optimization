@@ -1,5 +1,7 @@
 import file_handler
 
+# TODO: change unique_name to name and add ID from 0 to ...
+
 
 def main():
     careworkers = []
@@ -19,7 +21,7 @@ def main():
         match choice:
             case "1":
                 path = input(
-                    "Pfad angeben (data/careworkers.json): ") or "data/careworkers.j2son"
+                    "Pfad angeben (data/careworkers.json): ") or "data/careworkers.json"
                 careworkers = file_handler.import_careworkers(
                     json_file_path=path)
                 for cw in careworkers:

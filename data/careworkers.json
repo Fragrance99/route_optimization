@@ -1,7 +1,8 @@
 {
 	"careworkers": [
 		{
-			"unique_name": "Tim",
+			"id": 0,
+			"name": "Tim",
 			"phone_number": "02166 123654",
 			"level_of_care_competence": 3,
 			"comment": "No artificial respiration.",
@@ -18,7 +19,8 @@
 			]
 		},
 		{
-			"unique_name": "Alice",
+			"id": 1,
+			"name": "Alice",
 			"phone_number": "02166 123655",
 			"level_of_care_competence": 2,
 			"comment": "Can handle basic care tasks.",
@@ -35,7 +37,8 @@
 			]
 		},
 		{
-			"unique_name": "Bob",
+			"id": 2,
+			"name": "Bob",
 			"phone_number": "02166 123656",
 			"level_of_care_competence": 1,
 			"comment": "Requires supervision.",
@@ -52,7 +55,8 @@
 			]
 		},
 		{
-			"unique_name": "Clara",
+			"id": 3,
+			"name": "Clara",
 			"phone_number": "02166 123657",
 			"level_of_care_competence": 3,
 			"comment": "Experienced with dementia patients.",
@@ -69,7 +73,8 @@
 			]
 		},
 		{
-			"unique_name": "David",
+			"id": 4,
+			"name": "David",
 			"phone_number": "02166 123658",
 			"level_of_care_competence": 2,
 			"comment": "Skilled in physical therapy.",

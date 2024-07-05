@@ -1,5 +1,6 @@
 import json
 from datetime import time
+from re import I
 from typing import List
 
 from classes.time_slot import TimeSlot
@@ -21,7 +22,8 @@ def import_careworkers(json_file_path: str) -> List[Careworker]:
             working_hours.append(time_slot)
 
         careworker = Careworker(
-            unique_name=cw_data['unique_name'],
+            id=cw_data['id'],
+            name=cw_data['name'],
             phone_number=cw_data['phone_number'],
             level_of_care_competence=cw_data['level_of_care_competence'],
             comment=cw_data['comment'],
@@ -54,7 +56,8 @@ def import_residences(json_file_path: str) -> List[Residence]:
             time_slots.append(time_slot)
 
         residence = Residence(
-            unique_name=res_data['unique_name'],
+            id=res_data['id'],
+            name=res_data['name'],
             address=res_data['address'],
             phone_number=res_data['phone_number'],
             level_of_care=res_data['level_of_care'],
@@ -68,12 +71,12 @@ def import_residences(json_file_path: str) -> List[Residence]:
 
     for start_res in residences:
         for res_data in data['residences']:
-            if start_res.get_unique_name() == res_data['unique_name']:
+            if start_res.get_id() == res_data['id']:
                 # json entry for residence object found
                 distances: List[Distance] = []
                 for dest_data in res_data['distances']:
                     for dest_res in residences:
-                        if dest_res.get_unique_name() == dest_data['destination']:
+                        if dest_res.get_id() == dest_data['destination_id']:
                             # found residence object entry in List -> create Distance object and append
                             distance = Distance(destination=dest_res,
                                                 minutes_of_distance=dest_data['minutes_of_distance'])

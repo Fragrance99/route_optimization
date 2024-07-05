@@ -1,7 +1,8 @@
 {
 	"residences": [
 		{
-			"unique_name": "Depot",
+			"id": 0,
+			"name": "Depot",
 			"address": "Depot Street",
 			"phone_number": "02166 000000",
 			"level_of_care": 0,
@@ -16,29 +17,30 @@
 			],
 			"distances": [
 				{
-					"destination": "Family A",
+					"destination_id": 1,
 					"minutes_of_distance": 5
 				},
 				{
-					"destination": "Family B",
+					"destination_id": 2,
 					"minutes_of_distance": 7
 				},
 				{
-					"destination": "Family C",
+					"destination_id": 3,
 					"minutes_of_distance": 10
 				},
 				{
-					"destination": "Family D",
+					"destination_id": 4,
 					"minutes_of_distance": 15
 				},
 				{
-					"destination": "Family E",
+					"destination_id": 5,
 					"minutes_of_distance": 20
 				}
 			]
 		},
 		{
-			"unique_name": "Family A",
+			"id": 1,
+			"name": "Family A",
 			"address": "A Street",
 			"phone_number": "02166 123456",
 			"level_of_care": 1,
@@ -57,29 +59,30 @@
 			],
 			"distances": [
 				{
-					"destination": "Depot",
+					"destination_id": 0,
 					"minutes_of_distance": 5
 				},
 				{
-					"destination": "Family B",
+					"destination_id": 2,
 					"minutes_of_distance": 2
 				},
 				{
-					"destination": "Family C",
+					"destination_id": 3,
 					"minutes_of_distance": 4
 				},
 				{
-					"destination": "Family D",
+					"destination_id": 4,
 					"minutes_of_distance": 6
 				},
 				{
-					"destination": "Family E",
+					"destination_id": 5,
 					"minutes_of_distance": 10
 				}
 			]
 		},
 		{
-			"unique_name": "Family B",
+			"id": 2,
+			"name": "Family B",
 			"address": "B Street",
 			"phone_number": "02166 123457",
 			"level_of_care": 2,
@@ -98,29 +101,30 @@
 			],
 			"distances": [
 				{
-					"destination": "Depot",
+					"destination_id": 0,
 					"minutes_of_distance": 7
 				},
 				{
-					"destination": "Family A",
+					"destination_id": 1,
 					"minutes_of_distance": 2
 				},
 				{
-					"destination": "Family C",
+					"destination_id": 3,
 					"minutes_of_distance": 3
 				},
 				{
-					"destination": "Family D",
+					"destination_id": 4,
 					"minutes_of_distance": 5
 				},
 				{
-					"destination": "Family E",
+					"destination_id": 5,
 					"minutes_of_distance": 7
 				}
 			]
 		},
 		{
-			"unique_name": "Family C",
+			"id": 3,
+			"name": "Family C",
 			"address": "C Street",
 			"phone_number": "02166 123458",
 			"level_of_care": 3,
@@ -139,29 +143,30 @@
 			],
 			"distances": [
 				{
-					"destination": "Depot",
+					"destination_id": 0,
 					"minutes_of_distance": 10
 				},
 				{
-					"destination": "Family A",
+					"destination_id": 1,
 					"minutes_of_distance": 4
 				},
 				{
-					"destination": "Family B",
+					"destination_id": 2,
 					"minutes_of_distance": 3
 				},
 				{
-					"destination": "Family D",
+					"destination_id": 4,
 					"minutes_of_distance": 2
 				},
 				{
-					"destination": "Family E",
+					"destination_id": 5,
 					"minutes_of_distance": 6
 				}
 			]
 		},
 		{
-			"unique_name": "Family D",
+			"id": 4,
+			"name": "Family D",
 			"address": "D Street",
 			"phone_number": "02166 123459",
 			"level_of_care": 1,
@@ -180,29 +185,30 @@
 			],
 			"distances": [
 				{
-					"destination": "Depot",
+					"destination_id": 0,
 					"minutes_of_distance": 15
 				},
 				{
-					"destination": "Family A",
+					"destination_id": 1,
 					"minutes_of_distance": 6
 				},
 				{
-					"destination": "Family B",
+					"destination_id": 2,
 					"minutes_of_distance": 5
 				},
 				{
-					"destination": "Family C",
+					"destination_id": 3,
 					"minutes_of_distance": 2
 				},
 				{
-					"destination": "Family E",
+					"destination_id": 5,
 					"minutes_of_distance": 4
 				}
 			]
 		},
 		{
-			"unique_name": "Family E",
+			"id": 5,
+			"name": "Family E",
 			"address": "E Street",
 			"phone_number": "02166 123460",
 			"level_of_care": 2,
@@ -221,23 +227,23 @@
 			],
 			"distances": [
 				{
-					"destination": "Depot",
+					"destination_id": 0,
 					"minutes_of_distance": 20
 				},
 				{
-					"destination": "Family A",
+					"destination_id": 1,
 					"minutes_of_distance": 10
 				},
 				{
-					"destination": "Family B",
+					"destination_id": 2,
 					"minutes_of_distance": 7
 				},
 				{
-					"destination": "Family C",
+					"destination_id": 3,
 					"minutes_of_distance": 6
 				},
 				{
-					"destination": "Family D",
+					"destination_id": 4,
 					"minutes_of_distance": 4
 				}
 			]
