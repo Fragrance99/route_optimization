@@ -18,11 +18,11 @@
 			"distances": [
 				{
 					"destination_id": 1,
-					"minutes_of_distance": 5
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 2,
-					"minutes_of_distance": 7
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 3,
@@ -30,11 +30,11 @@
 				},
 				{
 					"destination_id": 4,
-					"minutes_of_distance": 15
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 5,
-					"minutes_of_distance": 20
+					"minutes_of_distance": 10
 				}
 			]
 		},
@@ -60,19 +60,19 @@
 			"distances": [
 				{
 					"destination_id": 0,
-					"minutes_of_distance": 5
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 2,
-					"minutes_of_distance": 2
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 3,
-					"minutes_of_distance": 4
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 4,
-					"minutes_of_distance": 6
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 5,
@@ -102,23 +102,23 @@
 			"distances": [
 				{
 					"destination_id": 0,
-					"minutes_of_distance": 7
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 1,
-					"minutes_of_distance": 2
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 3,
-					"minutes_of_distance": 3
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 4,
-					"minutes_of_distance": 5
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 5,
-					"minutes_of_distance": 7
+					"minutes_of_distance": 10
 				}
 			]
 		},
@@ -148,19 +148,19 @@
 				},
 				{
 					"destination_id": 1,
-					"minutes_of_distance": 4
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 2,
-					"minutes_of_distance": 3
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 4,
-					"minutes_of_distance": 2
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 5,
-					"minutes_of_distance": 6
+					"minutes_of_distance": 10
 				}
 			]
 		},
@@ -186,23 +186,23 @@
 			"distances": [
 				{
 					"destination_id": 0,
-					"minutes_of_distance": 15
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 1,
-					"minutes_of_distance": 6
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 2,
-					"minutes_of_distance": 5
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 3,
-					"minutes_of_distance": 2
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 5,
-					"minutes_of_distance": 4
+					"minutes_of_distance": 10
 				}
 			]
 		},
@@ -228,7 +228,7 @@
 			"distances": [
 				{
 					"destination_id": 0,
-					"minutes_of_distance": 20
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 1,
@@ -236,15 +236,15 @@
 				},
 				{
 					"destination_id": 2,
-					"minutes_of_distance": 7
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 3,
-					"minutes_of_distance": 6
+					"minutes_of_distance": 10
 				},
 				{
 					"destination_id": 4,
-					"minutes_of_distance": 4
+					"minutes_of_distance": 10
 				}
 			]
 		}

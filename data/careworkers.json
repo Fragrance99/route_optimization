@@ -35,60 +35,6 @@
 					"end": "17:00:00"
 				}
 			]
-		},
-		{
-			"id": 2,
-			"name": "Bob",
-			"phone_number": "02166 123656",
-			"level_of_care_competence": 1,
-			"comment": "Requires supervision.",
-			"maximum_working_hours": 7,
-			"working_hours": [
-				{
-					"beginning": "09:00:00",
-					"end": "11:00:00"
-				},
-				{
-					"beginning": "14:00:00",
-					"end": "17:00:00"
-				}
-			]
-		},
-		{
-			"id": 3,
-			"name": "Clara",
-			"phone_number": "02166 123657",
-			"level_of_care_competence": 3,
-			"comment": "Experienced with dementia patients.",
-			"maximum_working_hours": 9,
-			"working_hours": [
-				{
-					"beginning": "07:00:00",
-					"end": "10:00:00"
-				},
-				{
-					"beginning": "15:00:00",
-					"end": "19:00:00"
-				}
-			]
-		},
-		{
-			"id": 4,
-			"name": "David",
-			"phone_number": "02166 123658",
-			"level_of_care_competence": 2,
-			"comment": "Skilled in physical therapy.",
-			"maximum_working_hours": 8,
-			"working_hours": [
-				{
-					"beginning": "06:00:00",
-					"end": "10:00:00"
-				},
-				{
-					"beginning": "14:00:00",
-					"end": "18:00:00"
-				}
-			]
 		}
 	]
 }
