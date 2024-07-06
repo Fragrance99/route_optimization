@@ -38,9 +38,14 @@ def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.Rout
 
 def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
+    depot_index = 0
+    for res in residences:
+        if res.id == 0:
+            depot_index = 0
+
     # create routing index manager
     manager = pywrapcp.RoutingIndexManager(
-        len(residences), len(careworkers), 0)
+        len(residences), len(careworkers), depot_index)
     # create routing model
     routing = pywrapcp.RoutingModel(manager)
 
@@ -62,9 +67,9 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     transit_time_dimension_name = "Transit Time"
     routing.AddDimension(
         evaluator_index=transit_callback_index,
-        slack_max=0,
-        capacity=600,
-        fix_start_cumul_to_zero=True,
+        slack_max=1440,  # 1 day
+        capacity=1440,  # 1 day
+        fix_start_cumul_to_zero=False,
         name=transit_time_dimension_name
     )
     transit_time_dimension: pywrapcp.RoutingDimension = routing.GetDimensionOrDie(
@@ -72,7 +77,30 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     # penalty for large difference between min route distance and max route distance
     transit_time_dimension.SetGlobalSpanCostCoefficient(100)
     # coefficient applied to travel costs such that the difference defined above gets even bigger
-    transit_time_dimension.SetSpanCostCoefficientForAllVehicles(10)
+    # transit_time_dimension.SetSpanCostCoefficientForAllVehicles(10)
+
+    # add time windows constraints
+    # first add min and max of all time windows
+    # then remove the forbidden intervals from CumulVar
+    for residence_idx, res in enumerate(residences):
+        index: int = manager.NodeToIndex(residence_idx)
+
+        # intervals are ordered
+        intervals = res.get_time_slots_as_intervals()
+
+        transit_time_dimension.CumulVar(index).SetRange(
+            intervals[0][0], intervals[-1][1])
+        for i in range(len(intervals)-1):
+            transit_time_dimension.CumulVar(index).RemoveInterval(
+                intervals[i][1], intervals[i+1][0])
+
+    # instantiate route start and end times
+    for cw_idx, cw in enumerate(careworkers):
+        routing.AddVariableMaximizedByFinalizer(
+            transit_time_dimension.CumulVar(routing.Start(cw_idx))
+        )
+        routing.AddVariableMaximizedByFinalizer(
+            transit_time_dimension.CumulVar(routing.End(cw_idx)))
 
     # solution heuristic
     search_parameters: routing_parameters_pb2.RoutingSearchParameters = pywrapcp.DefaultRoutingSearchParameters()

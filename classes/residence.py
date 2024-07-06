@@ -14,6 +14,13 @@ class Residence:
         self.open_time_slots = open_time_slots
         self.distances = distances
 
+    def get_time_slots_as_intervals(self) -> list[tuple[int, int]]:
+        intervals: list[tuple[int, int]] = []
+        for ts in self.open_time_slots:
+            intervals.append(ts.to_tuple())
+
+        return intervals
+
     def get_distance(self, dest_res: 'Residence') -> int:
         if (self.id == dest_res.id):
             return 0
