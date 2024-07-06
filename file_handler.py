@@ -1,18 +1,16 @@
 import json
 from datetime import time
-from re import I
-from typing import List
 
 from classes.time_slot import TimeSlot
 from classes.careworker import Careworker
 from classes.residence import Distance, Residence
 
 
-def import_careworkers(json_file_path: str) -> List[Careworker]:
+def import_careworkers(json_file_path: str) -> list[Careworker]:
     with open(json_file_path, "r") as file:
         data = json.load(file)
 
-    careworkers: List[Careworker] = []
+    careworkers: list[Careworker] = []
     for cw_data in data['careworkers']:
         working_hours = []
         for wh_data in cw_data['working_hours']:
@@ -35,18 +33,18 @@ def import_careworkers(json_file_path: str) -> List[Careworker]:
     return careworkers
 
 
-def export_careworkers(json_file_path: str, careworkers: List[Careworker]):
+def export_careworkers(json_file_path: str, careworkers: list[Careworker]):
     if careworkers:
         data = {"careworkers": list(map(Careworker.to_dict, careworkers))}
         with open(json_file_path, "w") as file:
             json.dump(data, file, indent='\t')
 
 
-def import_residences(json_file_path: str) -> List[Residence]:
+def import_residences(json_file_path: str) -> list[Residence]:
     with open(json_file_path, "r") as file:
         data = json.load(file)
 
-    residences: List[Residence] = []
+    residences: list[Residence] = []
     for res_data in data['residences']:
         time_slots = []
         for ts_data in res_data['open_time_slots']:
@@ -71,13 +69,13 @@ def import_residences(json_file_path: str) -> List[Residence]:
 
     for start_res in residences:
         for res_data in data['residences']:
-            if start_res.get_id() == res_data['id']:
+            if start_res.id == res_data['id']:
                 # json entry for residence object found
-                distances: List[Distance] = []
+                distances: list[Distance] = []
                 for dest_data in res_data['distances']:
                     for dest_res in residences:
-                        if dest_res.get_id() == dest_data['destination_id']:
-                            # found residence object entry in List -> create Distance object and append
+                        if dest_res.id == dest_data['destination_id']:
+                            # found residence object entry in list -> create Distance object and append
                             distance = Distance(destination=dest_res,
                                                 minutes_of_distance=dest_data['minutes_of_distance'])
                             distances.append(distance)
@@ -86,7 +84,7 @@ def import_residences(json_file_path: str) -> List[Residence]:
     return residences
 
 
-def export_residences(json_file_path: str, residences: List[Residence]):
+def export_residences(json_file_path: str, residences: list[Residence]):
     if residences:
         data = {"residences": list(map(Residence.to_dict, residences))}
         with open(json_file_path, "w") as file:

@@ -1,9 +1,8 @@
-from typing import List
 from classes.time_slot import TimeSlot
 
 
 class Careworker:
-    def __init__(self, id: int, name: str, phone_number: str, level_of_care_competence: int, comment: str, maximum_working_hours: float, working_hours: List[TimeSlot]):
+    def __init__(self, id: int, name: str, phone_number: str, level_of_care_competence: int, comment: str, maximum_working_hours: float, working_hours: list[TimeSlot]):
         self.id = id
         self.name = name
         self.phone_number = phone_number
