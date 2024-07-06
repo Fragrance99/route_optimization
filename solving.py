@@ -59,13 +59,15 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     routing.AddDimension(
         evaluator_index=transit_callback_index,
         slack_max=0,
-        capacity=1000,
+        capacity=600,
         fix_start_cumul_to_zero=True,
         name=dimension_name
     )
     distance_dimension: pywrapcp.RoutingDimension = routing.GetDimensionOrDie(
         dimension_name)
+    # penalty for large difference between min route distance and max route distance
     distance_dimension.SetGlobalSpanCostCoefficient(100)
+    # coefficient applied to travel costs such that the difference defined above gets even bigger
     distance_dimension.SetSpanCostCoefficientForAllVehicles(10)
 
     # solution heuristic
