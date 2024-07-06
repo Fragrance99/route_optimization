@@ -6,7 +6,7 @@ class Careworker:
         self.id = id
         self.name = name
         self.phone_number = phone_number
-        self.level_of_care_competence = level_of_care_competence
+        self.level_of_care_competence = int(level_of_care_competence)
         self.comment = comment
         self.maximum_working_hours = maximum_working_hours
         self.working_hours = working_hours

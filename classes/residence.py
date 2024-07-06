@@ -7,9 +7,9 @@ class Residence:
         self.name = name
         self.address = address
         self.phone_number = phone_number
-        self.level_of_care = level_of_care
+        self.level_of_care = int(level_of_care)
         self.task = task
-        self.minutes_of_time_expense = minutes_of_time_expense
+        self.minutes_of_time_expense = int(minutes_of_time_expense)
         self.comment = comment
         self.open_time_slots = open_time_slots
         self.distances = distances
@@ -55,7 +55,7 @@ class Residence:
 class Distance:
     def __init__(self, destination: Residence, minutes_of_distance: int):
         self.destination = destination
-        self.minutes_of_distance = minutes_of_distance
+        self.minutes_of_distance = int(minutes_of_distance)
 
     def __str__(self) -> str:
         return f"Destination: {self.destination.name} ({self.destination.id}), Distance: {self.minutes_of_distance}"
