@@ -1,9 +1,7 @@
-from os import error
 from classes.careworker import Careworker
 from classes.residence import Residence
-import file_handler
-
-# TODO: change unique_name to name and add ID from 0 to ...
+import file_handling
+import solving
 
 
 def main():
@@ -26,31 +24,31 @@ def main():
             case "1":
                 path = input(
                     "Pfad angeben (data/careworkers.json): ") or "data/careworkers.json"
-                careworkers = file_handler.import_careworkers(
+                careworkers = file_handling.import_careworkers(
                     json_file_path=path)
                 for cw in careworkers:
                     print(cw)
             case "2":
                 path = input(
                     "Pfad angeben (data/careworkers.json): ") or "data/careworkers.json"
-                file_handler.export_careworkers(
+                file_handling.export_careworkers(
                     json_file_path=path, careworkers=careworkers)
             case "3":
                 path = input(
                     "Pfad angeben (data/residences.json): ") or "data/residences.json"
-                residences = file_handler.import_residences(
+                residences = file_handling.import_residences(
                     json_file_path=path)
                 for res in residences:
                     print(res)
             case "4":
                 path = input(
                     "Pfad angeben (data/residences.json): ") or "data/residences.json"
-                file_handler.export_residences(
+                file_handling.export_residences(
                     json_file_path=path, residences=residences)
             case "5":
                 if residences and careworkers:
-                    optimize_route(residences=residences,
-                                   careworkers=careworkers)
+                    solving.optimize_route(residences=residences,
+                                           careworkers=careworkers)
                 else:
                     print("Zuerst Residenzen und Pflegekräfte importieren.")
 
@@ -58,13 +56,6 @@ def main():
                 exit()
             case _:
                 print(f"Fehlerhafte Eingabe: {choice}")
-
-
-def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
-    for start in residences:
-        for dest in residences:
-            print(f"{start.name} -> {dest.name
-                                     }: {start.get_distance(dest)}")
 
 
 if __name__ == "__main__":
