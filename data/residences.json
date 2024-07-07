@@ -95,8 +95,8 @@
 					"end": "12:00:00"
 				},
 				{
-					"beginning": "14:00:00",
-					"end": "16:00:00"
+					"beginning": "22:00:00",
+					"end": "23:00:00"
 				}
 			],
 			"distances": [
@@ -217,12 +217,8 @@
 			"comment": "Patient has diabetes.",
 			"open_time_slots": [
 				{
-					"beginning": "07:00:00",
-					"end": "08:00:00"
-				},
-				{
-					"beginning": "10:00:00",
-					"end": "11:00:00"
+					"beginning": "23:00:00",
+					"end": "23:59:00"
 				}
 			],
 			"distances": [

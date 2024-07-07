@@ -5,39 +5,36 @@ from classes.residence import Residence
 
 
 def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.RoutingModel, solution: pywrapcp.Assignment, residences: list[Residence], careworkers: list[Careworker]):
-    print(f"Objective: {solution.ObjectiveValue()}")
-    max_route_distance = 0
-    for cw_index, cw in enumerate(careworkers):
-        index = routing.Start(cw_index)
-
-        plan_output = f"Route for careworker {cw.name}:\n"
-
-        route_distance = 0
-
+    transit_time_dimension = routing.GetDimensionOrDie("Transit Time")
+    total_time = 0
+    for cw_idx, cw in enumerate(careworkers):
+        index = routing.Start(cw_idx)
+        plan_output = f"Route for {cw.name}:\n"
         while not routing.IsEnd(index):
-            plan_output += f"{
-                residences[manager.IndexToNode(index)].name} -> "
-
-            previous_index = index
-
+            time_var = transit_time_dimension.CumulVar(index)
+            plan_output += (
+                f"{residences[manager.IndexToNode(index)].name}"
+                f" Time({solution.Min(time_var) - residences[manager.IndexToNode(
+                    index)].minutes_of_time_expense}, {solution.Max(time_var)})"
+                " -> "
+            )
             index = solution.Value(routing.NextVar(index))
 
-            route_distance += routing.GetArcCostForVehicle(
-                previous_index, index, cw_index)
-
-        plan_output += f"{residences[manager.IndexToNode(index)].name}\n"
-
-        plan_output += f"Distance of the route: {route_distance} min\n"
-
+        time_var = transit_time_dimension.CumulVar(index)
+        plan_output += (
+            f"{residences[manager.IndexToNode(index)].name}"
+            f" Time({solution.Min(time_var) - residences[manager.IndexToNode(
+                index)].minutes_of_time_expense}, {solution.Max(time_var)})\n"
+        )
+        plan_output += f"Time of the route: {solution.Min(time_var)} min\n"
         print(plan_output)
-
-        max_route_distance = max(route_distance, max_route_distance)
-
-    print(f"Maximum of the route distances: {max_route_distance} min")
+        total_time += solution.Min(time_var)
+    print(f"Total time of all routes: {total_time} min")
 
 
 def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
+    span_cost_coefficient = 10
     depot_index = 0
     for res in residences:
         if res.id == 0:
@@ -67,7 +64,7 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     transit_time_dimension_name = "Transit Time"
     routing.AddDimension(
         evaluator_index=transit_callback_index,
-        slack_max=1440,  # 1 day
+        slack_max=120,  #
         capacity=1440,  # 1 day
         fix_start_cumul_to_zero=False,
         name=transit_time_dimension_name
@@ -77,7 +74,8 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     # penalty for large difference between min route distance and max route distance
     transit_time_dimension.SetGlobalSpanCostCoefficient(100)
     # coefficient applied to travel costs such that the difference defined above gets even bigger
-    # transit_time_dimension.SetSpanCostCoefficientForAllVehicles(10)
+    transit_time_dimension.SetSpanCostCoefficientForAllVehicles(
+        span_cost_coefficient)
 
     # add time windows constraints
     # first add min and max of all time windows
@@ -96,10 +94,10 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
     # instantiate route start and end times
     for cw_idx, cw in enumerate(careworkers):
-        routing.AddVariableMaximizedByFinalizer(
+        routing.AddVariableMinimizedByFinalizer(
             transit_time_dimension.CumulVar(routing.Start(cw_idx))
         )
-        routing.AddVariableMaximizedByFinalizer(
+        routing.AddVariableMinimizedByFinalizer(
             transit_time_dimension.CumulVar(routing.End(cw_idx)))
 
     # solution heuristic
