@@ -1,6 +1,10 @@
 from datetime import time
 
 
+def minutes_to_time(minutes: int) -> time:
+    return time(hour=minutes // 60, minute=minutes % 60)
+
+
 def _time_to_minutes(time: time) -> int:
     return time.hour * 60 + time.minute
 
@@ -20,5 +24,5 @@ class TimeSlot:
         }
         return dictionary
 
-    def to_tuple(self) -> tuple[int, int]:
-        return (_time_to_minutes(self.beginning), _time_to_minutes(self.end))
+    def to_list(self) -> list[int]:
+        return [_time_to_minutes(self.beginning), _time_to_minutes(self.end)]

@@ -1,11 +1,11 @@
 from ortools.constraint_solver import routing_enums_pb2, pywrapcp, routing_parameters_pb2
-
+from classes.time_slot import minutes_to_time
 from classes.careworker import Careworker
 from classes.residence import Residence
 
+# TODO Soft bound (lower/upper?) on node visits per vehicle to balance load
 
-# potential issue: for the upper bound of time slots, service time is not considered
-# i.e. 12:00-13:00 time slot -> careworker can still come at 13:00
+
 def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.RoutingModel, solution: pywrapcp.Assignment, residences: list[Residence], careworkers: list[Careworker], dim_name: str):
     transit_time_dimension: pywrapcp.RoutingDimension = routing.GetDimensionOrDie(
         dim_name)
@@ -21,8 +21,8 @@ def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.Rout
             time_var = transit_time_dimension.CumulVar(residence_index)
             plan_output += (
                 f"{residences[manager.IndexToNode(residence_index)].name}"
-                f" Time({solution.Min(time_var)}, {solution.Max(
-                    time_var) + residences[manager.IndexToNode(residence_index)].minutes_of_time_expense})"
+                f" Time({minutes_to_time(solution.Min(time_var)).isoformat()}, {minutes_to_time(solution.Max(
+                    time_var) + residences[manager.IndexToNode(residence_index)].minutes_of_time_expense).isoformat()})"
                 " -> "
             )
             residence_index = solution.Value(routing.NextVar(residence_index))
@@ -32,8 +32,8 @@ def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.Rout
         route_time = end_time - start_time
         plan_output += (
             f"{residences[manager.IndexToNode(residence_index)].name}"
-            f" Time({solution.Min(time_var)}, {solution.Max(
-                time_var) + residences[manager.IndexToNode(residence_index)].minutes_of_time_expense})\n"
+            f" Time({minutes_to_time(solution.Min(time_var)).isoformat()}, {minutes_to_time(solution.Max(
+                time_var) + residences[manager.IndexToNode(residence_index)].minutes_of_time_expense).isoformat()})\n"
         )
         plan_output += f"Time of the route: {route_time} min\n"
         print(plan_output)
@@ -80,7 +80,7 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     transit_time_dimension: pywrapcp.RoutingDimension = routing.GetDimensionOrDie(
         transit_time_dimension_name)
     # penalty for large difference between min route distance and max route distance
-    transit_time_dimension.SetGlobalSpanCostCoefficient(100)
+    transit_time_dimension.SetGlobalSpanCostCoefficient(1000)
     # coefficient applied to travel costs such that the difference defined above gets even bigger
     transit_time_dimension.SetSpanCostCoefficientForAllVehicles(10)
 
@@ -92,6 +92,12 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
         # intervals are ordered
         intervals = res.get_time_slots_as_intervals()
+
+        # for the upper bound of time slots, service time would not be considered otherwise
+        # i.e. 12:00-13:00 time slot -> careworker can still come at 13:00
+        # -> edit time slots: upper bound - service time
+        for interval in intervals:
+            interval[1] = interval[1] - res.minutes_of_time_expense
 
         transit_time_dimension.CumulVar(index).SetRange(
             intervals[0][0], intervals[-1][1])
