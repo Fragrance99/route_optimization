@@ -34,7 +34,6 @@ def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.Rout
 
 def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
-    span_cost_coefficient = 10
     depot_index = 0
     for res in residences:
         if res.id == 0:
@@ -74,8 +73,7 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     # penalty for large difference between min route distance and max route distance
     transit_time_dimension.SetGlobalSpanCostCoefficient(100)
     # coefficient applied to travel costs such that the difference defined above gets even bigger
-    transit_time_dimension.SetSpanCostCoefficientForAllVehicles(
-        span_cost_coefficient)
+    transit_time_dimension.SetSpanCostCoefficientForAllVehicles(10)
 
     # add time windows constraints
     # first add min and max of all time windows
@@ -94,7 +92,7 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
     # instantiate route start and end times
     for cw_idx, cw in enumerate(careworkers):
-        routing.AddVariableMinimizedByFinalizer(
+        routing.AddVariableMaximizedByFinalizer(
             transit_time_dimension.CumulVar(routing.Start(cw_idx))
         )
         routing.AddVariableMinimizedByFinalizer(
@@ -103,7 +101,7 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     # solution heuristic
     search_parameters: routing_parameters_pb2.RoutingSearchParameters = pywrapcp.DefaultRoutingSearchParameters()
     search_parameters.first_solution_strategy = (
-        routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC
+        routing_enums_pb2.FirstSolutionStrategy.PATH_MOST_CONSTRAINED_ARC
     )
 
     # solve

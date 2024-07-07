@@ -91,12 +91,12 @@
 			"comment": "Patient is bedridden.",
 			"open_time_slots": [
 				{
-					"beginning": "10:00:00",
-					"end": "12:00:00"
+					"beginning": "13:00:00",
+					"end": "14:00:00"
 				},
 				{
 					"beginning": "22:00:00",
-					"end": "23:00:00"
+					"end": "23:59:00"
 				}
 			],
 			"distances": [
