@@ -4,36 +4,46 @@ from classes.careworker import Careworker
 from classes.residence import Residence
 
 
-def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.RoutingModel, solution: pywrapcp.Assignment, residences: list[Residence], careworkers: list[Careworker]):
-    transit_time_dimension = routing.GetDimensionOrDie("Transit Time")
-    total_time = 0
+# potential issue: for the upper bound of time slots, service time is not considered
+# i.e. 12:00-13:00 time slot -> careworker can still come at 13:00
+def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.RoutingModel, solution: pywrapcp.Assignment, residences: list[Residence], careworkers: list[Careworker], dim_name: str):
+    transit_time_dimension: pywrapcp.RoutingDimension = routing.GetDimensionOrDie(
+        dim_name)
+    total_time = 0  # of all careworkers
     for cw_idx, cw in enumerate(careworkers):
-        index = routing.Start(cw_idx)
+        route_time = 0  # of current route
+        residence_index = routing.Start(cw_idx)
         plan_output = f"Route for {cw.name}:\n"
-        while not routing.IsEnd(index):
-            time_var = transit_time_dimension.CumulVar(index)
+        start_time = solution.Min(
+            transit_time_dimension.CumulVar(residence_index))
+
+        while not routing.IsEnd(residence_index):
+            time_var = transit_time_dimension.CumulVar(residence_index)
             plan_output += (
-                f"{residences[manager.IndexToNode(index)].name}"
-                f" Time({solution.Min(time_var) - residences[manager.IndexToNode(
-                    index)].minutes_of_time_expense}, {solution.Max(time_var)})"
+                f"{residences[manager.IndexToNode(residence_index)].name}"
+                f" Time({solution.Min(time_var)}, {solution.Max(
+                    time_var) + residences[manager.IndexToNode(residence_index)].minutes_of_time_expense})"
                 " -> "
             )
-            index = solution.Value(routing.NextVar(index))
+            residence_index = solution.Value(routing.NextVar(residence_index))
 
-        time_var = transit_time_dimension.CumulVar(index)
+        time_var = transit_time_dimension.CumulVar(residence_index)
+        end_time = solution.Min(time_var)
+        route_time = end_time - start_time
         plan_output += (
-            f"{residences[manager.IndexToNode(index)].name}"
-            f" Time({solution.Min(time_var) - residences[manager.IndexToNode(
-                index)].minutes_of_time_expense}, {solution.Max(time_var)})\n"
+            f"{residences[manager.IndexToNode(residence_index)].name}"
+            f" Time({solution.Min(time_var)}, {solution.Max(
+                time_var) + residences[manager.IndexToNode(residence_index)].minutes_of_time_expense})\n"
         )
-        plan_output += f"Time of the route: {solution.Min(time_var)} min\n"
+        plan_output += f"Time of the route: {route_time} min\n"
         print(plan_output)
-        total_time += solution.Min(time_var)
+        total_time += route_time
     print(f"Total time of all routes: {total_time} min")
 
 
 def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
+    transit_time_dimension_name = "Transit Time"
     depot_index = 0
     for res in residences:
         if res.id == 0:
@@ -49,9 +59,9 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     # consists of travel time + service time at the destination node
     # create and register transit callback
     def transit_time_callback(from_index: int, to_index: int) -> int:
-        from_node: int = manager.IndexToNode(from_index)
-        to_node: int = manager.IndexToNode(to_index)
-        return residences[from_node].get_distance(residences[to_node]) + residences[to_node].minutes_of_time_expense
+        from_node_index: int = manager.IndexToNode(from_index)
+        to_node_index: int = manager.IndexToNode(to_index)
+        return residences[from_node_index].minutes_of_time_expense + residences[from_node_index].get_distance(residences[to_node_index])
 
     transit_callback_index = routing.RegisterTransitCallback(
         transit_time_callback)
@@ -60,7 +70,6 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
     # create dimension to accumulate the distance of all careworkers in order for the solver to
     # be able to minimize the longest route and balance each route
-    transit_time_dimension_name = "Transit Time"
     routing.AddDimension(
         evaluator_index=transit_callback_index,
         slack_max=120,  #
@@ -92,7 +101,7 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
     # instantiate route start and end times
     for cw_idx, cw in enumerate(careworkers):
-        routing.AddVariableMaximizedByFinalizer(
+        routing.AddVariableMinimizedByFinalizer(
             transit_time_dimension.CumulVar(routing.Start(cw_idx))
         )
         routing.AddVariableMinimizedByFinalizer(
@@ -109,7 +118,7 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
     if solution:
         print_solution(manager=manager, routing=routing, solution=solution,
-                       careworkers=careworkers, residences=residences)
+                       careworkers=careworkers, residences=residences, dim_name=transit_time_dimension_name)
     else:
         print("No solution")
 

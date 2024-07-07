@@ -26,8 +26,8 @@ def main():
                     "Pfad angeben (data/careworkers.json): ") or "data/careworkers.json"
                 careworkers = file_handling.import_careworkers(
                     json_file_path=path)
-                for cw in careworkers:
-                    print(cw)
+                # for cw in careworkers:
+                #     print(cw)
             case "2":
                 path = input(
                     "Pfad angeben (data/careworkers.json): ") or "data/careworkers.json"
@@ -38,8 +38,8 @@ def main():
                     "Pfad angeben (data/residences.json): ") or "data/residences.json"
                 residences = file_handling.import_residences(
                     json_file_path=path)
-                for res in residences:
-                    print(res)
+                # for res in residences:
+                #     print(res)
             case "4":
                 path = input(
                     "Pfad angeben (data/residences.json): ") or "data/residences.json"
