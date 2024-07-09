@@ -3,7 +3,7 @@ from classes.time_slot import minutes_to_time
 from classes.careworker import Careworker
 from classes.residence import Residence
 
-# TODO Soft bound (lower/upper?) on node visits per vehicle to balance load
+# TODO Soft bound (lower/upper?) on node visits/work done per vehicle to balance load
 
 
 def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.RoutingModel, solution: pywrapcp.Assignment, residences: list[Residence], careworkers: list[Careworker], dim_name: str):
@@ -43,7 +43,8 @@ def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.Rout
 
 def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
-    transit_time_dimension_name = "Transit Time"
+    time_dimension_name = "Transit Time"
+    work_time_dimension_name = "Work Time"
     depot_index = 0
     for res in residences:
         if res.id == 0:
@@ -58,31 +59,45 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     # TRANSIT TIME DIMENSION
     # consists of travel time + service time at the destination node
     # create and register transit callback
-    def transit_time_callback(from_index: int, to_index: int) -> int:
+    def service_travel_time_callback(from_index: int, to_index: int) -> int:
         from_node_index: int = manager.IndexToNode(from_index)
         to_node_index: int = manager.IndexToNode(to_index)
         return residences[from_node_index].minutes_of_time_expense + residences[from_node_index].get_distance(residences[to_node_index])
 
-    transit_callback_index = routing.RegisterTransitCallback(
-        transit_time_callback)
+    service_travel_time_callback_index = routing.RegisterTransitCallback(
+        service_travel_time_callback)
     # define cost of each arc
-    routing.SetArcCostEvaluatorOfAllVehicles(transit_callback_index)
+    routing.SetArcCostEvaluatorOfAllVehicles(
+        service_travel_time_callback_index)
 
     # create dimension to accumulate the distance of all careworkers in order for the solver to
     # be able to minimize the longest route and balance each route
     routing.AddDimension(
-        evaluator_index=transit_callback_index,
-        slack_max=120,  #
-        capacity=1440,  # 1 day
+        evaluator_index=service_travel_time_callback_index,
+        slack_max=1*60,  #
+        capacity=24*60,  # 1 day -> can work from 0 hours to 24 hours a day
         fix_start_cumul_to_zero=False,
-        name=transit_time_dimension_name
+        name=time_dimension_name
     )
     transit_time_dimension: pywrapcp.RoutingDimension = routing.GetDimensionOrDie(
-        transit_time_dimension_name)
+        time_dimension_name)
     # penalty for large difference between min route distance and max route distance
-    transit_time_dimension.SetGlobalSpanCostCoefficient(1000)
+    transit_time_dimension.SetGlobalSpanCostCoefficient(100)
     # coefficient applied to travel costs such that the difference defined above gets even bigger
     transit_time_dimension.SetSpanCostCoefficientForAllVehicles(10)
+
+    # Work Time constraint -> balances work time and sets max work time
+    routing.AddDimension(
+        evaluator_index=service_travel_time_callback_index,
+        slack_max=1*60,
+        capacity=8*60,
+        fix_start_cumul_to_zero=False,
+        name=work_time_dimension_name
+    )
+    work_time_dimension: pywrapcp.RoutingDimension = routing.GetDimensionOrDie(
+        work_time_dimension_name)
+    work_time_dimension.SetGlobalSpanCostCoefficient(100)
+    work_time_dimension.SetSpanCostCoefficientForAllVehicles(10)
 
     # add time windows constraints
     # first add min and max of all time windows
@@ -124,7 +139,7 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
     if solution:
         print_solution(manager=manager, routing=routing, solution=solution,
-                       careworkers=careworkers, residences=residences, dim_name=transit_time_dimension_name)
+                       careworkers=careworkers, residences=residences, dim_name=time_dimension_name)
     else:
         print("No solution")
 
