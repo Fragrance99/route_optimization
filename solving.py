@@ -12,6 +12,16 @@ def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.Rout
     transit_time_dimension: pywrapcp.RoutingDimension = routing.GetDimensionOrDie(
         dim_name)
     total_time = 0  # of all careworkers
+
+    dropped_residences = "Dropped Residences: "
+    for node in range(routing.Size()):
+        if routing.IsStart(node) or routing.IsEnd(node):
+            continue
+        if solution.Value(routing.NextVar(node)) == node:
+            dropped_residences += f" {
+                residences[manager.IndexToNode(node)].name}"
+    print(dropped_residences)
+
     for cw_idx, cw in enumerate(careworkers):
         route_time = 0  # of current route
         residence_index = routing.Start(cw_idx)
@@ -134,9 +144,11 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     work_time_dimension.SetSpanCostCoefficientForAllVehicles(10)
 
     # drop visits to residences if no solution found
+    # do make starting depot removable
     for res_idx, res in enumerate(residences):
-        routing.AddDisjunction([manager.NodeToIndex(
-            res_idx)], drop_residence_visits_penalty)
+        if (res_idx > 0):
+            routing.AddDisjunction([manager.NodeToIndex(
+                res_idx)], drop_residence_visits_penalty)
 
     # solution heuristic
     search_parameters: routing_parameters_pb2.RoutingSearchParameters = pywrapcp.DefaultRoutingSearchParameters()
@@ -152,7 +164,3 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
                        careworkers=careworkers, residences=residences, dim_name=time_dimension_name)
     else:
         print("No solution")
-
-    # for start in residences:
-    #     for dest in residences:
-    #         print(f"{start.name} -> {dest.name}: {start.get_distance(dest)}")
