@@ -1,9 +1,11 @@
+import enum
 from ortools.constraint_solver import routing_enums_pb2, pywrapcp, routing_parameters_pb2
 from classes.time_slot import minutes_to_time
 from classes.careworker import Careworker
 from classes.residence import Residence
 
-# TODO Soft bound (lower/upper?) on node visits/work done per vehicle to balance load
+# TODO  drop nodes if solution unfeasable
+#       (penalty for using a vehicle -> maxing out shifts while still using as less careworkers as possible)
 
 
 def print_solution(manager: pywrapcp.RoutingIndexManager, routing: pywrapcp.RoutingModel, solution: pywrapcp.Assignment, residences: list[Residence], careworkers: list[Careworker], dim_name: str):
@@ -45,6 +47,7 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
 
     time_dimension_name = "Transit Time"
     work_time_dimension_name = "Work Time"
+    drop_residence_visits_penalty = 1000000
     depot_index = 0
     for res in residences:
         if res.id == 0:
@@ -86,19 +89,6 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
     # coefficient applied to travel costs such that the difference defined above gets even bigger
     transit_time_dimension.SetSpanCostCoefficientForAllVehicles(10)
 
-    # Work Time constraint -> balances work time and sets max work time
-    routing.AddDimension(
-        evaluator_index=service_travel_time_callback_index,
-        slack_max=1*60,
-        capacity=8*60,
-        fix_start_cumul_to_zero=False,
-        name=work_time_dimension_name
-    )
-    work_time_dimension: pywrapcp.RoutingDimension = routing.GetDimensionOrDie(
-        work_time_dimension_name)
-    work_time_dimension.SetGlobalSpanCostCoefficient(100)
-    work_time_dimension.SetSpanCostCoefficientForAllVehicles(10)
-
     # add time windows constraints
     # first add min and max of all time windows
     # then remove the forbidden intervals from CumulVar
@@ -127,6 +117,26 @@ def optimize_route(residences: list[Residence], careworkers: list[Careworker]):
         )
         routing.AddVariableMinimizedByFinalizer(
             transit_time_dimension.CumulVar(routing.End(cw_idx)))
+
+    # Work Time constraint -> balances work time and sets max work time
+    routing.AddDimension(
+        evaluator_index=service_travel_time_callback_index,
+        slack_max=1*60,
+        capacity=9*60,  # 9 hours -> can work 9 hours a day (including slack)
+        fix_start_cumul_to_zero=False,
+        name=work_time_dimension_name
+    )
+    work_time_dimension: pywrapcp.RoutingDimension = routing.GetDimensionOrDie(
+        work_time_dimension_name)
+    # penalty for not distributing work evenly
+    work_time_dimension.SetGlobalSpanCostCoefficient(100)
+    # penalty for long working times of vehicles
+    work_time_dimension.SetSpanCostCoefficientForAllVehicles(10)
+
+    # drop visits to residences if no solution found
+    for res_idx, res in enumerate(residences):
+        routing.AddDisjunction([manager.NodeToIndex(
+            res_idx)], drop_residence_visits_penalty)
 
     # solution heuristic
     search_parameters: routing_parameters_pb2.RoutingSearchParameters = pywrapcp.DefaultRoutingSearchParameters()
